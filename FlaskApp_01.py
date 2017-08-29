@@ -1,16 +1,23 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello_world():
-    favorite_character = "Jon Snow"
-    others = ["Danny", "The hound", "Arya", "Night King"]
-    return render_template("index.html",
-                           favorite_character = favorite_character,
-                           others = others)
+@app.route('/main/<user>')
+def main(user):
 
+    return render_template("index.html", username=user)
+
+
+@app.route('/')
+def login():
+    return render_template("login.html")
+
+
+@app.route('/processform', methods=['GET', 'POST'])
+def processform():
+    user = request.form['user']
+    return redirect(url_for('main', user=user))
 
 if __name__ == '__main__':
     app.run()
